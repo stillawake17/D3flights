@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight Counts as Percentage of Quotas by Category</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add any additional styles here -->
+</head>
+<body>
+    <h2>Flight Counts as Percentage of Quotas by Category</h2>
+    <!-- The visualization will be appended to this div -->
+    <!-- <div id="chart"></div> -->
+
+ 
+    <div id="progress-bars-container">
+        <div class="progress-bar-container">
+            <label for="total-flights-progress">Total Flights</label>
+            <div id="total-flights-progress" class="progress-bar total"></div>
+            <span id="total-flights-progress-label" class="progress-label"></span>
+
+
+        </div>
+        <div class="progress-bar-container">
+            <label for="shoulder-flights-progress">Shoulder Hour Flights</label>
+            <div id="shoulder-flights-progress" class="progress-bar shoulder"></div>
+            <span id="shoulder-flights-progress-label" class="progress-label"></span>
+        </div>
+        <div class="progress-bar-container">
+            <label for="night-flights-progress">Night Hour Flights</label>
+            <div id="night-flights-progress" class="progress-bar night"></div>
+            <span id="night-flights-progress-label" class="progress-label"></span>
+        </div>
+    </div>
+
+
+  
+  <!-- Container for the monthly chart that will be updated on click -->
+ 
+  
+  <div id="hide-chart-btn-container">
+    <button id="hide-chart-btn">Hide Chart</button>
+</div>
+
+  <div id="monthly-chart-container">
+    <!-- This is where the new chart will be appended -->
+   
+   
+  </div>
+
+  
+  
+
+    <!-- Reference to your separate JavaScript file -->
+    <script src="main.js"></script>
+</body>
+</html>
