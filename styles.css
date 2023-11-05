@@ -5,6 +5,12 @@ h2 {
         text-align: center;
     }
 
+    #progText {
+       font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+       text-align: center;
+       padding:20px; 
+    }
+
 #progress-bars-container {
     display: flex;
     justify-content: space-between;
@@ -71,10 +77,12 @@ h2 {
 .chart-title {
     fill: #333; /* Title color */
     font-weight: bold;
+    font-size: 14px;
 }
 
 /* Style for bar count labels */
 .bar-label {
     fill: #333; /* Label color */
     font-size: 12px;
+    padding: 20px;
 }
