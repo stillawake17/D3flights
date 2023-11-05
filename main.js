@@ -238,9 +238,16 @@ attachEventListeners();
 }).catch(function(error) {
     console.error("Error loading the data:", error);
 })
+
+function showMonthlyChartContainer() {
+  d3.select("#monthly-chart-container").style("display", "block");
+  // Now it's safe to append new elements to the container
+}
+
 // Re-attach event listeners when needed
 function redrawCharts() {
   // ...code to redraw charts...
+  drawMonthlyChart();
   attachEventListeners();
 }
 
