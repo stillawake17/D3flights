@@ -114,9 +114,10 @@ function drawMonthlyChart(monthlyData, category) {
     
     
     // Set up dimensions for the chart
-    const margin = {top: 20, right: 20, bottom: 30, left: 40},
-          width = 960 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
+    const margin = {top: 50, right: 20, bottom: 30, left: 40}, // Adjust top margin for title
+    width = 600 - margin.left - margin.right, // Reduce width for a more compact chart
+    height = 400 - margin.top - margin.bottom; // Reduce height for a more compact chart
+
 
     // Define color schemes
   const colorSchemes = {
@@ -134,6 +135,15 @@ function drawMonthlyChart(monthlyData, category) {
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          // Adding title to the chart
+    svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", 0 - margin.top / 2)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("text-decoration", "underline")
+    .text(`${category} - Monthly Distribution`);
   
            // Check if SVG is created properly
     console.log("SVG created with width and height:", width, height);
@@ -144,7 +154,6 @@ function drawMonthlyChart(monthlyData, category) {
         .padding(0.1)
         .domain(monthlyData.map((_, i) => i)); // 0-11 for Jan-Dec
 
-  
     // Y scale - flight counts
     const y = d3.scaleLinear()
         .range([height, 0])
@@ -176,10 +185,18 @@ console.log("Axes drawn.");
           .attr("height", d => height - y(d))
           .style("fill", barColor); // Set the color for the bars
 
+          // Adding data count above each bar
+    svg.selectAll(".text")
+        .data(monthlyData)
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .attr("x", (d, i) => x(i) + x.bandwidth() / 2)
+        .attr("y", d => y(d) - 5)
+        .attr("text-anchor", "middle")
+        .text(d => d);
     // Check if bars are appended
 console.log("Bars should now be visible on the chart.");
-
-console.log("Attempting to show the hide button.");
 
 
            // Make the hide button visible

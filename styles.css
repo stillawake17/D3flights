@@ -67,3 +67,14 @@ h2 {
     display: none;
   }
   
+  /* Style for chart titles */
+.chart-title {
+    fill: #333; /* Title color */
+    font-weight: bold;
+}
+
+/* Style for bar count labels */
+.bar-label {
+    fill: #333; /* Label color */
+    font-size: 12px;
+}
