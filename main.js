@@ -211,6 +211,7 @@ console.log("Bars should now be visible on the chart.");
 
 // Click event listeners for the progress bars
 
+function attachEventListeners() {
 d3.select("#total-flights-progress").on("click", function() {
     const totalFlightsMonthlyData = aggregateDataByMonth(data, new Date().getFullYear());
     drawMonthlyChart(totalFlightsMonthlyData, 'Total Flights');
@@ -230,14 +231,22 @@ d3.select("#night-flights-progress").on("click", function() {
     drawMonthlyChart(nightFlightsMonthlyData, 'Night Hour Flights');
 });
 
+}
 
+attachEventListeners();
 
 }).catch(function(error) {
     console.error("Error loading the data:", error);
 })
-// Hide button event listener
+// Re-attach event listeners when needed
+function redrawCharts() {
+  // ...code to redraw charts...
+  attachEventListeners();
+}
+
 d3.select("#hide-chart-btn").on("click", function() {
-    // Hide the chart container and button
-    // ...
-  });
+  d3.select("#monthly-chart-container").style("display", "none");
+  d3.select(this).style("display", "none");
+  // No need to detach event listeners, just hide the elements
+});
 });
