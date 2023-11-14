@@ -1,109 +1,104 @@
 
 document.addEventListener('DOMContentLoaded', function() {
-// Load JSON data into a variable named `data`
-
-
-d3.json('data/combined_flights_data.json').then(function(data) {
-    // Process data
-    data.forEach(function(d) {
-        let date = new Date(d.lastSeen * 1000); // Convert to milliseconds
-        d.latestTime = date;
-        d.Hour = date.getHours();
-        d.Minute = date.getMinutes();
-
-        d.Time_Category = "Regular arrivals";
-        if (d.Hour === 23 && d.Minute < 30) d.Time_Category = "Shoulder hour flights";
-        else if ((d.Hour === 23 && d.Minute >= 30) || d.Hour < 6) d.Time_Category = "Night hour arrivals";
-        else if (d.Hour === 6) d.Time_Category = "Shoulder hour flights";
-    });
-
-    let total_flights = data.length;
-    let shoulder_hour_flights = data.filter(d => d.Time_Category === 'Shoulder hour flights').length;
-    let night_hour_flights = data.filter(d => d.Time_Category === 'Night hour arrivals').length;
-
-    // Quotas
-    let quotas = [85990, 3000, 9500];
-
-    // Categories and counts
-    let categories = ['Total Flights', 'Shoulder Hour Flights', 'Night Hour Flights'];
-    let counts = [total_flights, shoulder_hour_flights, night_hour_flights];
-
-    // Calculating percentages
-    let percentages = counts.map((count, index) => (count / quotas[index]) * 100);
-
-   
-// Function to aggregate flight data by month for a given year
-function aggregateDataByMonth(flightData, year) {
-    const monthlyCounts = new Array(12).fill(0); // Array for each month
+    // Load JSON data into a variable named `data`
     
-    flightData.forEach(d => {
-      let date = new Date(d.lastSeen * 1000); // Convert to milliseconds
-      let flightYear = date.getFullYear();
-      let flightMonth = date.getMonth(); // getMonth() returns 0-11 for Jan-Dec
+    
+    d3.json('data/combined_flights_data.json').then(function(data) {
+        // Process data
+        data.forEach(function(d) {
+            let date = new Date(d.lastSeen * 1000); // Convert to milliseconds
+            d.latestTime = date;
+            d.Hour = date.getHours();
+            d.Minute = date.getMinutes();
+    
+            d.Time_Category = "Regular arrivals";
+            if (d.Hour === 23 && d.Minute < 30) d.Time_Category = "Shoulder hour flights";
+            else if ((d.Hour === 23 && d.Minute >= 30) || d.Hour < 6) d.Time_Category = "Night hour arrivals";
+            else if (d.Hour === 6) d.Time_Category = "Shoulder hour flights";
+        });
+    
+        let total_flights = data.length;
+        let shoulder_hour_flights = data.filter(d => d.Time_Category === 'Shoulder hour flights').length;
+        let night_hour_flights = data.filter(d => d.Time_Category === 'Night hour arrivals').length;
+    
+        // Quotas
+        let quotas = [85990, 3000, 9500];
+    
+        // Categories and counts
+        let categories = ['Total Flights', 'Shoulder Hour Flights', 'Night Hour Flights'];
+        let counts = [total_flights, shoulder_hour_flights, night_hour_flights];
+    
+        // Calculating percentages
+        let percentages = counts.map((count, index) => (count / quotas[index]) * 100);
+    
+       
+    // Function to aggregate flight data by month for a given year
+    function aggregateDataByMonth(flightData, year) {
+        const monthlyCounts = new Array(12).fill(0); // Array for each month
+        
+        flightData.forEach(d => {
+          let date = new Date(d.lastSeen * 1000); // Convert to milliseconds
+          let flightYear = date.getFullYear();
+          let flightMonth = date.getMonth(); // getMonth() returns 0-11 for Jan-Dec
+          
+          if (flightYear === year) {
+            monthlyCounts[flightMonth]++;
+          }
+        });
       
-      if (flightYear === year) {
-        monthlyCounts[flightMonth]++;
+        return monthlyCounts;
       }
+      
+    
+      
+      d3.select("#hide-chart-btn").on("click", function() {
+        // Hide the chart container
+        d3.select("#monthly-chart-container").style("display", "none");
+        // Hide the hide button itself
+        d3.select("#hide-chart-btn").style("display", "none");
     });
-  
-    return monthlyCounts;
-  }
-  
+    
+           // Assuming percentages is an array with values for total, shoulder, and night flights
+    // and that quotas are the maximum values for each bar
+    
+    // Example: let percentages = [60, 45, 80]; // Percent completion for each category
+    
+    // Define maximum width for the progress bars (could be based on the container's width)
+    const maxBarWidth = 300; // This should match the width of your progress containers
+    // Define colors for each progress bar
+    const barColors = {
+      totalFlights: "steelblue",
+      shoulderFlights: "darkorange",
+      nightFlights: "green"
+    };
+    
+    percentages = percentages.map(function(d) {
+        return d.toFixed(1);  // Rounds the percentage to one decimal place
+      });
+    
 
-  
-  d3.select("#hide-chart-btn").on("click", function() {
-    // Hide the chart container
-    d3.select("#monthly-chart-container").style("display", "none");
-    // Hide the hide button itself
-    d3.select("#hide-chart-btn").style("display", "none");
-});
+// Assuming you have a scale set up for your gauge
+var gaugeScale = d3.scaleLinear()
+  .range([0, 1]) // Range in radians or degrees for your gauge
+  .domain([0, 100]); // Your data's domain
 
-       // Assuming percentages is an array with values for total, shoulder, and night flights
-// and that quotas are the maximum values for each bar
+// Define the arc generator for the gauge
+var arc = d3.arc()
+  .innerRadius(100)
+  .outerRadius(140)
+  .startAngle(0) // Converting from degrees to radians
+  .endAngle((d) => gaugeScale(d)); // d is the data point in degrees
 
-// Example: let percentages = [60, 45, 80]; // Percent completion for each category
+// Append the gauge to the SVG container
+var gaugeGroup = svg.append("g")
+  .attr("transform", "translate(" + center_x + "," + center_y + ")");
 
-// Define maximum width for the progress bars (could be based on the container's width)
-const maxBarWidth = 300; // This should match the width of your progress containers
-// Define colors for each progress bar
-const barColors = {
-  totalFlights: "steelblue",
-  shoulderFlights: "darkorange",
-  nightFlights: "green"
-};
+gaugeGroup.append("path")
+  .datum(percentages[0]) // The data point, e.g., 50 for 50%
+  .style("fill", barColors.totalFlights)
+  .attr("d", arc);
 
-percentages = percentages.map(function(d) {
-    return d.toFixed(1);  // Rounds the percentage to one decimal place
-  });
-
-// Update the progress bars
-// Total flights
-d3.select("#total-flights-progress")
-  .style("width", `${(parseFloat(percentages[0] / 100) * maxBarWidth)}px`)
-  .style("background-color", barColors.totalFlights) // Set color for total flights
-  .text(` ${percentages[0]}%`);
-
-  d3.select("#total-flights-progress-label")
-  .text(`Total Flights ${percentages[0]}%`);
-
-d3.select("#shoulder-flights-progress")
-  .style("width", `${(parseFloat(percentages[1] / 100) * maxBarWidth)}px`)
-  .style("background-color", barColors.shoulderFlights) // Set color for shoulder flights
-  .text(` ${percentages[1]}%`); //this is the text within the bar
-
-  d3.select("#shoulder-flights-progress-label")
-  .text(`Shoulder Hour Flights ${percentages[1]}%`);
-
-//   Night Flights
-d3.select("#night-flights-progress")
-  .style("width", `${(parseFloat(percentages[2] / 100) * maxBarWidth)}px`)
-  .style("background-color", barColors.nightFlights) // Set color for night flights
-  .text(` ${percentages[2]}%`); //this is the text within the bar
-
-  d3.select("#night-flights-progress-label")
-  .text(`Night Hour Flights ${percentages[2]}%`);
-
-  
+// Add any other elements like text, ticks, etc.
 // Function to draw the bar chart for monthly data
 function drawMonthlyChart(monthlyData, category) {
     // Clear any existing charts
