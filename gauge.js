@@ -76,6 +76,41 @@ document.addEventListener('DOMContentLoaded', function() {
         return d.toFixed(1);  // Rounds the percentage to one decimal place
       });
     
+// Assuming `percentages` is an array of values for total, shoulder, and night flights
+// Draw gauges for each category
+const gauges = ["total-flights-gauge", "shoulder-flights-gauge", "night-flights-gauge"];
+
+gauges.forEach((gaugeId, i) => {
+    // Select the SVG element by ID
+    const svg = d3.select(`#${gaugeId}`);
+
+    // Define the center of the gauge
+    const center_x = parseInt(svg.style("width")) / 2;
+    const center_y = parseInt(svg.style("height")) / 2;
+
+    // Set up the gauge scale
+    var gaugeScale = d3.scaleLinear()
+      .range([0, Math.PI]) // Range in radians for half-circle gauge
+      .domain([0, 100]); // The data's domain
+
+    // Define the arc generator for the gauge
+    var arc = d3.arc()
+      .innerRadius(70) // Adjust as needed
+      .outerRadius(85) // Adjust as needed
+      .startAngle(0) // Start angle
+      .endAngle(d => gaugeScale(percentages[i])); // End angle based on data
+
+    // Append the gauge to the SVG element
+    var gaugeGroup = svg.append("g")
+      .attr("transform", `translate(${center_x}, ${center_y})`);
+
+    gaugeGroup.append("path")
+      .datum(percentages[i])
+      .style("fill", barColors[categories[i]])
+      .attr("d", arc);
+
+    // Add any other elements like text, ticks, etc.
+});
 
 // Assuming you have a scale set up for your gauge
 var gaugeScale = d3.scaleLinear()
