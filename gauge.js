@@ -89,9 +89,14 @@ gauges.forEach((gaugeId, i) => {
     const center_y = parseInt(svg.style("height")) / 2;
 
     // Set up the gauge scale
-    var gaugeScale = d3.scaleLinear()
-      .range([0, Math.PI]) // Range in radians for half-circle gauge
-      .domain([0, 100]); // The data's domain
+    // var gaugeScale = d3.scaleLinear()
+    //   .range([0, Math.PI]) // Range in radians for half-circle gauge
+    //   .domain([0, 100]); // The data's domain
+
+    // For a semi-circle gauge
+var gaugeScale = d3.scaleLinear()
+.range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
+.domain([0, 100]);
 
     // Define the arc generator for the gauge
     var arc = d3.arc()
