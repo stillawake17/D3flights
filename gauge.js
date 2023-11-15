@@ -155,6 +155,11 @@ let dataNightFlights = [{
   }
 }];
 Plotly.newPlot('gauge-night-flights', dataNightFlights, { width: 600, height: 300 });
+// Assuming your percentages array is defined and contains the correct data
+Plotly.newPlot('gauge-total-flights', dataTotalFlights, { width: 300, height: 150 });
+Plotly.newPlot('gauge-shoulder-flights', dataShoulderFlights, { width: 300, height: 150 });
+Plotly.newPlot('gauge-night-flights', dataNightFlights, { width: 300, height: 150 });
+
 
 // Render the Plotly gauge chart
 Plotly.newPlot('gauge-charts-container', gaugeData, layout);
