@@ -95,8 +95,10 @@ gauges.forEach((gaugeId, i) => {
 
     const svg = d3.select(`#${gaugeId}`);
 
-    const center_x = parseInt(svg.style("width")) / 2;
+    const center_x = parseInt(svg.style("width","border", "1px solid black")) / 2;
     const center_y = parseInt(svg.style("height")) / 2;
+   
+
 
     // Define the arc generator for the gauge inside the forEach loop
     var arc = d3.arc()
@@ -104,6 +106,7 @@ gauges.forEach((gaugeId, i) => {
         .outerRadius(85)
         .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
         .endAngle(gaugeScale(percentage)); // Ensure this is a function that returns the angle
+
 
     var gaugeGroup = svg.append("g")
         .attr("transform", `translate(${center_x}, ${center_y})`);
@@ -139,12 +142,7 @@ gauges.forEach((gaugeId, i) => {
         .text(`${percentage.toFixed(1)}%`);
 });
 
-// Define the arc generator for the gauge
-// var arc = d3.arc()
-//   .innerRadius(100)
-//   .outerRadius(140)
-//   .startAngle(0) // Converting from degrees to radians
-//   .endAngle((d) => gaugeScale(d)); // d is the data point in degrees
+
 
 // // Append the gauge to the SVG container
 // var gaugeGroup = svg.append("g")
