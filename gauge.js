@@ -76,63 +76,61 @@ document.addEventListener('DOMContentLoaded', function() {
         return d.toFixed(1);  // Rounds the percentage to one decimal place
       });
     
+
+        
 // Assuming `percentages` is an array of values for total, shoulder, and night flights
 // Draw gauges for each category
 const gauges = ["total-flights-gauge", "shoulder-flights-gauge", "night-flights-gauge"];
 
 gauges.forEach((gaugeId, i) => {
+  const percentage = percentages[i]; // Define percentage here for use within this scope
     // Select the SVG element by ID
     const svg = d3.select(`#${gaugeId}`);
+
 
     // Define the center of the gauge
     const center_x = parseInt(svg.style("width")) / 2;
     const center_y = parseInt(svg.style("height")) / 2;
 
-    // Set up the gauge scale
-    // var gaugeScale = d3.scaleLinear()
-    //   .range([0, Math.PI]) // Range in radians for half-circle gauge
-    //   .domain([0, 100]); // The data's domain
-
-    // For a semi-circle gauge
-var gaugeScale = d3.scaleLinear()
-.range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
-.domain([0, 100]);
-
-
+ // Define gauge scale outside of the forEach loop
+    var gaugeScale = d3.scaleLinear()
+            .range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
+            .domain([0, 100]); // The data's domain
+            
 var arc = d3.arc()
   .innerRadius(70)
   .outerRadius(85)
   .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
   .endAngle(d => gaugeScale(d)); // Ensure this is a function that returns the angle
 
-
-
-    // // Define the arc generator for the gauge
-    // var arc = d3.arc()
-    //   .innerRadius(70) // Adjust as needed
-    //   .outerRadius(85) // Adjust as needed
-    //   .startAngle(0) // Start angle
-    //   .endAngle(d => gaugeScale(percentages[i])); // End angle based on data
-
     // Append the gauge to the SVG element
     var gaugeGroup = svg.append("g")
       .attr("transform", `translate(${center_x}, ${center_y})`);
 
-    gaugeGroup.append("path")
-      .datum(percentages[i])
-      .style("fill", barColors[categories[i]] || "magenta")
-      .attr("d", arc);
+      gaugeGroup.append("path")
+                .datum(percentage)
+                .style("fill", "url(#gauge-gradient)")
+                .attr("d", arc.endAngle(gaugeScale(percentage)));
+
+    // gaugeGroup.append("path")
+      // .datum(percentages[i])
+      // .style("fill", barColors[categories[i]] || "magenta")
+      // .attr("d", arc);
     
  
+      
 
     // Add any other elements like text, ticks, etc.
     // Assuming 'percentage' is the current value
-const angle = gaugeScale(percentage); // Convert percentage to angle
-const needleLength = 80; // Adjust as needed
+    const angle = gaugeScale(percentage); // Convert percentage to angle
+    const needleLength = 80; // Adjust as needed
+
+    const needleX = center_x - needleLength * Math.cos(angle);
+    const needleY = center_y - needleLength * Math.sin(angle);
 
 // Calculate needle's end point coordinates
-const needleX = center_x + needleLength * Math.cos(Math.PI / 2 - angle);
-const needleY = center_y - needleLength * Math.sin(Math.PI / 2 - angle);
+// const needleX = center_x + needleLength * Math.cos(Math.PI / 2 - angle);
+// const needleY = center_y - needleLength * Math.sin(Math.PI / 2 - angle);
 
 // Append the needle to the gauge
 gaugeGroup.append("line")
@@ -142,6 +140,15 @@ gaugeGroup.append("line")
   .attr("y2", needleY)
   .attr("stroke", "black")
   .attr("stroke-width", 2);
+
+  // Append the needle to the gauge
+            gaugeGroup.append("line")
+                .attr("x1", center_x)
+                .attr("y1", center_y)
+                .attr("x2", needleX)
+                .attr("y2", needleY)
+                .attr("stroke", "black")
+                .attr("stroke-width", 2);
 
   // Append the text to the gauge
 gaugeGroup.append("text")
@@ -176,6 +183,8 @@ gaugeGroup.append("path")
   .style("fill", barColors.totalFlights)
   .attr("d", arc);
 
+
+  
 // Add any other elements like text, ticks, etc.
 // Function to draw the bar chart for monthly data
 function drawMonthlyChart(monthlyData, category) {
