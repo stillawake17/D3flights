@@ -76,72 +76,43 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     
 
-
-// Assuming the gaugeScale is correctly defined
-var gaugeScale = d3.scaleLinear()
-    .range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
-    .domain([0, 100]); // The data's domain
-
-const gauges = ["total-flights-gauge", "shoulder-flights-gauge", "night-flights-gauge"];
-
-gauges.forEach((gaugeId, i) => {
-    const percentageValue = percentages[i]; // Get the current percentage value
-    const percentage = parseFloat(percentageValue); // Make sure it's a number
-    if (isNaN(percentage)) {
-        console.error("Invalid percentage value:", percentageValue);
-        return; // Skip this gauge if the value is not a number
+// Using the percentages array you provided
+let gaugeData = categories.map((category, index) => {
+  return {
+    domain: { x: [0, 1], y: [0, 1] },
+    value: percentages[index],
+    title: { text: category },
+    type: "indicator",
+    mode: "gauge+number+delta",
+    delta: { reference: quotas[index] }, // Reference could be set to the quota or some other benchmark
+    gauge: {
+      axis: { range: [null, 100] }, // Since it's a percentage, the range is 0-100
+      bar: { color: "darkblue" }, // Customize the bar color inside the gauge
+      steps: [
+        { range: [0, 50], color: "lightgreen" },
+        { range: [50, 75], color: "yellow" },
+        { range: [75, 100], color: "red" }
+      ],
+      threshold: {
+        line: { color: "red", width: 4 },
+        thickness: 0.75,
+        value: 90 // Assuming 90% is a critical threshold for each category
+      }
     }
-
-    const svg = d3.select(`#${gaugeId}`);
-    const width = +svg.attr("width");
-    const height = +svg.attr("height");
-    const center_x = width / 2;
-    const center_y = height / 2;
-
-    var gaugeGroup = svg.append("g")
-        .attr("transform", `translate(${center_x}, ${center_y})`);
-
-    var arc = d3.arc()
-        .innerRadius(70)
-        .outerRadius(85)
-        .startAngle(-Math.PI / 2)
-        .endAngle(gaugeScale(percentage)); // Set the end angle based on the percentage
-
-    // Append the full arc background first
-    gaugeGroup.append("path")
-        .datum({endAngle: Math.PI / 2}) // Full semi-circle
-        .style("fill", "#ccc") // Fill with a light grey color for the gauge background
-        .attr("d", arc);
-
-    // Draw the filled arc path representing the current value
-    gaugeGroup.append("path")
-        .datum({endAngle: gaugeScale(percentage)})
-        .style("fill", "#007bff") // Fill with a color for the filled part of the gauge
-        .attr("d", arc);
-
-    // Add needle (line element)
-    const angle = gaugeScale(percentage);
-    const needleLength = 70;
-
-    gaugeGroup.append("line")
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", needleLength * Math.cos(angle))
-        .attr("y2", -needleLength * Math.sin(angle))
-        .attr("stroke", "black")
-        .attr("stroke-width", 2);
-
-    // Add text label for the percentage
-    gaugeGroup.append("text")
-        .attr("x", 0)
-        .attr("y", 20) // Offset below the center
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(`${percentage.toFixed(1)}%`);
+  };
 });
 
-});
-  
+// Plotly layout setup
+let layout = {
+  width: 600,
+  height: 400 * categories.length, // Adjust the height based on the number of gauges
+  margin: { t: 25, b: 25, l: 25, r: 25 },
+  grid: { rows: categories.length, columns: 1 } // Create a grid layout to display multiple gauges
+};
+
+// Render the Plotly gauge chart
+Plotly.newPlot('gauge-charts-container', gaugeData, layout);
+
 // Add any other elements like text, ticks, etc.
 // Function to draw the bar chart for monthly data
 function drawMonthlyChart(monthlyData, category) {
@@ -288,11 +259,9 @@ function showMonthlyChartContainer() {
   // Now it's safe to append new elements to the container
 }
 
-
-
 d3.select("#hide-chart-btn").on("click", function() {
   d3.select("#monthly-chart-container").style("display", "none");
   d3.select(this).style("display", "none");
   // No need to detach event listeners, just hide the elements
 });
-
+});
