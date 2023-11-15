@@ -28,9 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let categories = ['Total Flights', 'Shoulder Hour Flights', 'Night Hour Flights'];
         let counts = [total_flights, shoulder_hour_flights, night_hour_flights];
     
-        // Calculating percentages
-        let percentages = counts.map((count, index) => (count / quotas[index]) * 100);
-    
+       
        
     // Function to aggregate flight data by month for a given year
     function aggregateDataByMonth(flightData, year) {
@@ -77,88 +75,67 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     
 
-        
-// Assuming `percentages` is an array of values for total, shoulder, and night flights
+// Calculating percentages
+let percentages = counts.map((count, index) => (count / quotas[index]) * 100);
+
+// Define gauge scale outside of the forEach loop
+var gaugeScale = d3.scaleLinear()
+    .range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
+    .domain([0, 100]); // The data's domain
+
 // Draw gauges for each category
 const gauges = ["total-flights-gauge", "shoulder-flights-gauge", "night-flights-gauge"];
-
 gauges.forEach((gaugeId, i) => {
-  const percentage = percentages[i]; // Define percentage here for use within this scope
-    // Select the SVG element by ID
+    const percentageValue = percentages[i]; // Get the current percentage value
+    const percentage = parseFloat(percentageValue); // Make sure it's a number
+    if (isNaN(percentage)) {
+        console.error("Invalid percentage value:", percentageValue);
+        return; // Skip this gauge if the value is not a number
+    }
+
     const svg = d3.select(`#${gaugeId}`);
 
-
-    // Define the center of the gauge
     const center_x = parseInt(svg.style("width")) / 2;
     const center_y = parseInt(svg.style("height")) / 2;
 
- // Define gauge scale outside of the forEach loop
-    var gaugeScale = d3.scaleLinear()
-            .range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
-            .domain([0, 100]); // The data's domain
-            
-var arc = d3.arc()
-  .innerRadius(70)
-  .outerRadius(85)
-  .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
-  .endAngle(d => gaugeScale(d)); // Ensure this is a function that returns the angle
+    // Define the arc generator for the gauge inside the forEach loop
+    var arc = d3.arc()
+        .innerRadius(70)
+        .outerRadius(85)
+        .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
+        .endAngle(gaugeScale(percentage)); // Ensure this is a function that returns the angle
 
-    // Append the gauge to the SVG element
     var gaugeGroup = svg.append("g")
-      .attr("transform", `translate(${center_x}, ${center_y})`);
+        .attr("transform", `translate(${center_x}, ${center_y})`);
 
-      gaugeGroup.append("path")
-                .datum(percentage)
-                .style("fill", "url(#gauge-gradient)")
-                .attr("d", arc.endAngle(gaugeScale(percentage)));
+    // Draw the arc path
+    gaugeGroup.append("path")
+        .datum(percentage)
+        .style("fill", "url(#gauge-gradient)")
+        .attr("d", arc);
 
-    // gaugeGroup.append("path")
-      // .datum(percentages[i])
-      // .style("fill", barColors[categories[i]] || "magenta")
-      // .attr("d", arc);
-    
- 
-      
+    // Add needle (line element)
+    const angle = gaugeScale(percentage);
+    const needleLength = 70; // Adjust as needed
 
-    // Add any other elements like text, ticks, etc.
-    // Assuming 'percentage' is the current value
-    const angle = gaugeScale(percentage); // Convert percentage to angle
-    const needleLength = 80; // Adjust as needed
-
-    const needleX = center_x - needleLength * Math.cos(angle);
+    const needleX = center_x + needleLength * Math.cos(angle);
     const needleY = center_y - needleLength * Math.sin(angle);
 
-// Calculate needle's end point coordinates
-// const needleX = center_x + needleLength * Math.cos(Math.PI / 2 - angle);
-// const needleY = center_y - needleLength * Math.sin(Math.PI / 2 - angle);
+    gaugeGroup.append("line")
+        .attr("x1", center_x)
+        .attr("y1", center_y)
+        .attr("x2", needleX)
+        .attr("y2", needleY)
+        .attr("stroke", "black")
+        .attr("stroke-width", 2);
 
-// Append the needle to the gauge
-gaugeGroup.append("line")
-  .attr("x1", center_x)
-  .attr("y1", center_y)
-  .attr("x2", needleX)
-  .attr("y2", needleY)
-  .attr("stroke", "black")
-  .attr("stroke-width", 2);
-
-  // Append the needle to the gauge
-            gaugeGroup.append("line")
-                .attr("x1", center_x)
-                .attr("y1", center_y)
-                .attr("x2", needleX)
-                .attr("y2", needleY)
-                .attr("stroke", "black")
-                .attr("stroke-width", 2);
-
-  // Append the text to the gauge
-gaugeGroup.append("text")
-  .attr("x", center_x)
-  .attr("y", center_y + 20) // Offset by 20 units below the center
-  .attr("text-anchor", "middle")
-  .style("font-size", "16px")
-  .text(`${percentage.toFixed(1)}%`);
-
-
+    // Add text label
+    gaugeGroup.append("text")
+        .attr("x", center_x)
+        .attr("y", center_y + 20) // Offset by 20 units below the center
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(percentage.toFixed(1) + '%');
 });
 
 
