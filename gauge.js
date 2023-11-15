@@ -218,25 +218,25 @@ function drawMonthlyChart(monthlyData, category) {
   const barColor = colorSchemes[category] || 'grey'; // Fallback color if category is not found
 
     // Create SVG container for the chart
-    const svg = d3.select("#monthly-chart-container").append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // const svg = d3.select("#monthly-chart-container").append("svg")
+    //       .attr("width", width + margin.left + margin.right)
+    //       .attr("height", height + margin.top + margin.bottom)
+    //     .append("g")
+    //       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
           
 
-          // Adding title to the chart
-    svg.append("text")
-    .attr("x", width / 2)
-    .attr("y", 0 - margin.top / 2)
-    .attr("text-anchor", "middle")
-    .style("font-size", "16px")
-    .style("text-decoration", "underline")
-    .text(`${category} - Monthly Distribution`);
+    //       // Adding title to the chart
+    // svg.append("text")
+    // .attr("x", width / 2)
+    // .attr("y", 0 - margin.top / 2)
+    // .attr("text-anchor", "middle")
+    // .style("font-size", "16px")
+    // .style("text-decoration", "underline")
+    // .text(`${category} - Monthly Distribution`);
   
-           // Check if SVG is created properly
-    console.log("SVG created with width and height:", width, height);
+    //        // Check if SVG is created properly
+    // console.log("SVG created with width and height:", width, height);
 
     // X scale - months
     const x = d3.scaleBand()
