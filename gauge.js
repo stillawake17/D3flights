@@ -99,11 +99,11 @@ gauges.forEach((gaugeId, i) => {
     const center_y = parseInt(svg.style("height")) / 2;
 
     // Define the arc generator for the gauge inside the forEach loop
-    var arc = d3.arc()
-        .innerRadius(70)
-        .outerRadius(85)
-        .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
-        .endAngle(gaugeScale(percentage)); // Ensure this is a function that returns the angle
+    // var arc = d3.arc()
+    //     .innerRadius(70)
+    //     .outerRadius(85)
+    //     .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
+    //     .endAngle(gaugeScale(percentage)); // Ensure this is a function that returns the angle
 
     var gaugeGroup = svg.append("g")
         .attr("transform", `translate(${center_x}, ${center_y})`);
@@ -139,12 +139,6 @@ gauges.forEach((gaugeId, i) => {
         .text(`${percentage.toFixed(1)}%`);
 });
 
-
-// Assuming you have a scale set up for your gauge
-var gaugeScale = d3.scaleLinear()
-  .range([0, 1]) // Range in radians or degrees for your gauge
-  .domain([0, 100]); // Your data's domain
-
 // Define the arc generator for the gauge
 var arc = d3.arc()
   .innerRadius(100)
@@ -152,14 +146,14 @@ var arc = d3.arc()
   .startAngle(0) // Converting from degrees to radians
   .endAngle((d) => gaugeScale(d)); // d is the data point in degrees
 
-// Append the gauge to the SVG container
-var gaugeGroup = svg.append("g")
-  .attr("transform", "translate(" + center_x + "," + center_y + ")");
+// // Append the gauge to the SVG container
+// var gaugeGroup = svg.append("g")
+//   .attr("transform", "translate(" + center_x + "," + center_y + ")");
 
-gaugeGroup.append("path")
-  .datum(percentages[0]) // The data point, e.g., 50 for 50%
-  .style("fill", barColors.totalFlights)
-  .attr("d", arc);
+// gaugeGroup.append("path")
+//   .datum(percentages[0]) // The data point, e.g., 50 for 50%
+//   .style("fill", barColors.totalFlights)
+//   .attr("d", arc);
 
 
   
