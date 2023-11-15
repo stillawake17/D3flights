@@ -252,41 +252,41 @@ function drawMonthlyChart(monthlyData, category) {
 // Check scales
 console.log("X and Y scales set.");
 
-    // X axis - months
-    svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickFormat(i => d3.timeFormat("%B")(new Date(0, i)))); // Convert month number to name
+    // // X axis - months
+    // svg.append("g")
+    //     .attr("transform", "translate(0," + height + ")")
+    //     .call(d3.axisBottom(x).tickFormat(i => d3.timeFormat("%B")(new Date(0, i)))); // Convert month number to name
   
-    // Y axis - flight counts
-    svg.append("g")
-        .call(d3.axisLeft(y));
+    // // Y axis - flight counts
+    // svg.append("g")
+    //     .call(d3.axisLeft(y));
   
 // Check axes
 console.log("Axes drawn.");
 
-    // Bars for the chart
-    svg.selectAll(".bar")
-        .data(monthlyData)
-        .enter().append("rect")
-          .attr("class", "bar")
-          .attr("x", (d, i) => x(i))
-          .attr("width", x.bandwidth())
-          .attr("y", d => y(d))
-          .attr("height", d => height - y(d))
-          .style("fill", barColor); // Set the color for the bars
+    // // Bars for the chart
+    // svg.selectAll(".bar")
+    //     .data(monthlyData)
+    //     .enter().append("rect")
+    //       .attr("class", "bar")
+    //       .attr("x", (d, i) => x(i))
+    //       .attr("width", x.bandwidth())
+    //       .attr("y", d => y(d))
+    //       .attr("height", d => height - y(d))
+    //       .style("fill", barColor); // Set the color for the bars
 
-          // Adding data count above each bar
-    svg.selectAll(".text")
-        .data(monthlyData)
-        .enter()
-        .append("text")
-        .attr("class", "label")
-        .attr("x", (d, i) => x(i) + x.bandwidth() / 2)
-        .attr("y", d => y(d) - 5)
-        .attr("text-anchor", "middle")
-        .text(d => d);
-    // Check if bars are appended
-console.log("Bars should now be visible on the chart.");
+//           // Adding data count above each bar
+//     svg.selectAll(".text")
+//         .data(monthlyData)
+//         .enter()
+//         .append("text")
+//         .attr("class", "label")
+//         .attr("x", (d, i) => x(i) + x.bandwidth() / 2)
+//         .attr("y", d => y(d) - 5)
+//         .attr("text-anchor", "middle")
+//         .text(d => d);
+//     // Check if bars are appended
+// console.log("Bars should now be visible on the chart.");
 
 
            // Make the hide button visible
