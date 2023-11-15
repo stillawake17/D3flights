@@ -106,7 +106,18 @@ h2 {
     padding: 20px;
 }
 
-#monthly-chart-container {
+/* #monthly-chart-container {
 
     padding-left:350px;
+} */
+
+@media (max-width: 768px) {
+  #gauge-charts-container {
+    flex-direction: column; /* Stack gauges vertically on smaller screens */
+  }
+
+  #gauge-charts-container > div {
+    width: 100%; /* Full width for smaller screens */
+    margin-bottom: 10px; /* Add space between stacked gauges */
+  }
 }
