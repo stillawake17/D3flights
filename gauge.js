@@ -218,11 +218,11 @@ function drawMonthlyChart(monthlyData, category) {
   const barColor = colorSchemes[category] || 'grey'; // Fallback color if category is not found
 
     // Create SVG container for the chart
-    // const svg = d3.select("#monthly-chart-container").append("svg")
-    //       .attr("width", width + margin.left + margin.right)
-    //       .attr("height", height + margin.top + margin.bottom)
-    //     .append("g")
-    //       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const svg = d3.select("#monthly-chart-container").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
           
 
@@ -253,13 +253,13 @@ function drawMonthlyChart(monthlyData, category) {
 console.log("X and Y scales set.");
 
     // // X axis - months
-    // svg.append("g")
-    //     .attr("transform", "translate(0," + height + ")")
-    //     .call(d3.axisBottom(x).tickFormat(i => d3.timeFormat("%B")(new Date(0, i)))); // Convert month number to name
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickFormat(i => d3.timeFormat("%B")(new Date(0, i)))); // Convert month number to name
   
     // // Y axis - flight counts
-    // svg.append("g")
-    //     .call(d3.axisLeft(y));
+    svg.append("g")
+        .call(d3.axisLeft(y));
   
 // Check axes
 console.log("Axes drawn.");
@@ -301,32 +301,32 @@ console.log("Axes drawn.");
 
 // Click event listeners for the progress bars
 
-// function attachEventListeners() {
-//   d3.select("#total-flights-progress").on("click", function() {
-//     showMonthlyChartContainer(); // Make sure the container is visible
-//     const totalFlightsMonthlyData = aggregateDataByMonth(data, new Date().getFullYear());
-//     drawMonthlyChart(totalFlightsMonthlyData, 'Total Flights');
-//   });
+function attachEventListeners() {
+  d3.select("#total-flights-progress").on("click", function() {
+    showMonthlyChartContainer(); // Make sure the container is visible
+    const totalFlightsMonthlyData = aggregateDataByMonth(data, new Date().getFullYear());
+    drawMonthlyChart(totalFlightsMonthlyData, 'Total Flights');
+  });
 
-//   d3.select("#shoulder-flights-progress").on("click", function() {
-//     showMonthlyChartContainer(); // Make sure the container is visible
-//     const shoulderFlightsMonthlyData = aggregateDataByMonth(
-//         data.filter(d => d.Time_Category === 'Shoulder hour flights'),
-//         new Date().getFullYear());
-//     drawMonthlyChart(shoulderFlightsMonthlyData, 'Shoulder Hour Flights');
-//   });
+  d3.select("#shoulder-flights-progress").on("click", function() {
+    showMonthlyChartContainer(); // Make sure the container is visible
+    const shoulderFlightsMonthlyData = aggregateDataByMonth(
+        data.filter(d => d.Time_Category === 'Shoulder hour flights'),
+        new Date().getFullYear());
+    drawMonthlyChart(shoulderFlightsMonthlyData, 'Shoulder Hour Flights');
+  });
 
-//   d3.select("#night-flights-progress").on("click", function() {
-//     showMonthlyChartContainer(); // Make sure the container is visible
-//     const nightFlightsMonthlyData = aggregateDataByMonth(
-//         data.filter(d => d.Time_Category === 'Night hour arrivals'), 
-//         new Date().getFullYear());
-//     drawMonthlyChart(nightFlightsMonthlyData, 'Night Hour Flights');
-//   });
-// }
+  d3.select("#night-flights-progress").on("click", function() {
+    showMonthlyChartContainer(); // Make sure the container is visible
+    const nightFlightsMonthlyData = aggregateDataByMonth(
+        data.filter(d => d.Time_Category === 'Night hour arrivals'), 
+        new Date().getFullYear());
+    drawMonthlyChart(nightFlightsMonthlyData, 'Night Hour Flights');
+  });
+}
 
 // // Call the function to attach the event listeners
-// attachEventListeners();
+attachEventListeners();
 
 }).catch(function(error) {
     console.error("Error loading the data:", error);
