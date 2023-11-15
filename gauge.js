@@ -94,6 +94,8 @@ gauges.forEach((gaugeId, i) => {
     }
 
     const svg = d3.select(`#${gaugeId}`);
+   
+    
 
     // Assuming svg is a proper selection of an SVG element
 svg.style("border", "1px solid black"); // Add border for debugging
@@ -103,29 +105,30 @@ const height = +svg.attr("height"); // Get height attribute
 const center_x = width / 2;
 const center_y = height / 2;
 
-
-
-    // Define the arc generator for the gauge inside the forEach loop
-    var fullArc = d3.arc()
-        .innerRadius(70)
-        .outerRadius(85)
-        .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
-        .endAngle(Math.PI / 2); // Ensure this is a function that returns the angle
-
-        // Append the full arc background first
-gaugeGroup.append("path")
-.datum({endAngle: Math.PI / 2}) // Full semi-circle
-.style("fill", "url(#gauge-gradient)") // Assuming you have a gradient defined for the full range
-.attr("d", fullArc);
-
-    var gaugeGroup = svg.append("g")
+var gaugeGroup = svg.append("g")
         .attr("transform", `translate(${center_x}, ${center_y})`);
 
-    // Draw the arc path
-    gaugeGroup.append("path")
-        .datum(percentage)
-        .style("fill", "url(#gauge-gradient)")
-        .attr("d", arc);
+            // Define the arc generator for the gauge
+var arc = d3.arc()
+.innerRadius(70)
+.outerRadius(85)
+.startAngle(-Math.PI / 2) // Starting angle for a semi-circle
+.endAngle(gaugeScale); // Dynamic end angle based on data
+
+// Append the full arc background first
+gaugeGroup.append("path")
+.datum({endAngle: Math.PI / 2}) // Full semi-circle
+.style("fill", "#ccc") // Fill with a light grey color for the gauge background
+.attr("d", arc);
+
+ // Draw the filled arc path representing the current value
+ arc.endAngle(gaugeScale(percentage)); // Set the end angle of the arc
+ gaugeGroup.append("path")
+     .datum({endAngle: gaugeScale(percentage)})
+     .style("fill", "#007bff") // Fill with a color for the filled part of the gauge
+     .attr("d", arc);
+
+   
 
     // Add needle (line element)
       const angle = gaugeScale(percentage) - Math.PI / 2;
@@ -144,24 +147,40 @@ gaugeGroup.append("path")
     //     .attr("stroke-width", 2);
 
         // Append the needle
-gaugeGroup.append("line")
-.attr("x1", 0)
-.attr("y1", 0)
-.attr("x2", 0)
-.attr("y2", -needleLength) // Negative because SVG y-coordinates go from top to bottom
-.attr("transform", `rotate(${needleAngle * (180 / Math.PI)})`) // Convert to degrees for SVG rotation
-.attr("stroke", "black")
-.attr("stroke-width", 2);
+// gaugeGroup.append("line")
+// .attr("x1", 0)
+// .attr("y1", 0)
+// .attr("x2", 0)
+// .attr("y2", -needleLength) // Negative because SVG y-coordinates go from top to bottom
+// .attr("transform", `rotate(${needleAngle * (180 / Math.PI)})`) // Convert to degrees for SVG rotation
+// .attr("stroke", "black")
+// .attr("stroke-width", 2);
 
-    // Add text label
-    gaugeGroup.append("text")
-        .attr("x", center_x)
-        .attr("y", center_y + 20) // Offset by 20 units below the center
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(`${percentage.toFixed(1)}%`);
+ // Append the needle (line element)
+ gaugeGroup.append("line")
+ .attr("x1", 0)
+ .attr("y1", 0)
+ .attr("x2", needleLength * Math.cos(angle))
+ .attr("y2", -needleLength * Math.sin(angle)) // Negative because SVG y-coordinates go from top to bottom
+ .attr("stroke", "black")
+ .attr("stroke-width", 2);
 
+    // // Add text label
+    // gaugeGroup.append("text")
+    //     .attr("x", center_x)
+    //     .attr("y", center_y + 20) // Offset by 20 units below the center
+    //     .attr("text-anchor", "middle")
+    //     .style("font-size", "16px")
+    //     .text(`${percentage.toFixed(1)}%`);
 
+  // Add text label for the percentage
+  gaugeGroup.append("text")
+  .attr("x", 0)
+  .attr("y", 0) // Adjust the position as needed
+  .attr("text-anchor", "middle")
+  .style("font-size", "16px")
+  .text(`${percentage.toFixed(1)}%`);
+});
         
 });
 
@@ -210,6 +229,8 @@ function drawMonthlyChart(monthlyData, category) {
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          
 
           // Adding title to the chart
     svg.append("text")
@@ -312,7 +333,6 @@ function attachEventListeners() {
 
 // Call the function to attach the event listeners
 attachEventListeners();
-
 
 }).catch(function(error) {
     console.error("Error loading the data:", error);
