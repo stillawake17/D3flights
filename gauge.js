@@ -102,6 +102,9 @@ let gaugeData = categories.map((category, index) => {
   };
 });
 
+
+
+
 // For Total Flights
 let dataTotalFlights = [{
   type: "indicator",
@@ -154,6 +157,14 @@ let dataNightFlights = [{
     ],
   }
 }];
+
+// The layout for the gauges
+var layout = {
+  width: 500, // Adjust the width as needed
+  height: 300, // Adjust the height as needed
+  margin: { t: 25, b: 25, l: 50, r: 50 }
+};
+
 Plotly.newPlot('gauge-night-flights', dataNightFlights, { width: 600, height: 300 });
 // Assuming your percentages array is defined and contains the correct data
 Plotly.newPlot('gauge-total-flights', dataTotalFlights, { width: 300, height: 150 });
