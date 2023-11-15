@@ -126,7 +126,34 @@ var arc = d3.arc()
  
 
     // Add any other elements like text, ticks, etc.
+    // Assuming 'percentage' is the current value
+const angle = gaugeScale(percentage); // Convert percentage to angle
+const needleLength = 80; // Adjust as needed
+
+// Calculate needle's end point coordinates
+const needleX = center_x + needleLength * Math.cos(Math.PI / 2 - angle);
+const needleY = center_y - needleLength * Math.sin(Math.PI / 2 - angle);
+
+// Append the needle to the gauge
+gaugeGroup.append("line")
+  .attr("x1", center_x)
+  .attr("y1", center_y)
+  .attr("x2", needleX)
+  .attr("y2", needleY)
+  .attr("stroke", "black")
+  .attr("stroke-width", 2);
+
+  // Append the text to the gauge
+gaugeGroup.append("text")
+  .attr("x", center_x)
+  .attr("y", center_y + 20) // Offset by 20 units below the center
+  .attr("text-anchor", "middle")
+  .style("font-size", "16px")
+  .text(`${percentage.toFixed(1)}%`);
+
+
 });
+
 
 // Assuming you have a scale set up for your gauge
 var gaugeScale = d3.scaleLinear()
