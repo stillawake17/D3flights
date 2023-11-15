@@ -350,4 +350,4 @@ d3.select("#hide-chart-btn").on("click", function() {
   d3.select(this).style("display", "none");
   // No need to detach event listeners, just hide the elements
 });
-});
+
