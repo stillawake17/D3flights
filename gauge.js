@@ -136,7 +136,7 @@ gauges.forEach((gaugeId, i) => {
         .attr("y", center_y + 20) // Offset by 20 units below the center
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-        .text(percentage.toFixed(1) + '%');
+        .text(`${percentage.toFixed(1)}%`);
 });
 
 
