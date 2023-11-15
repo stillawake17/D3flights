@@ -103,11 +103,25 @@ let gaugeData = categories.map((category, index) => {
 });
 
 // Plotly layout setup
+// Plotly layout setup
 let layout = {
   width: 600,
-  height: 400 * categories.length, // Adjust the height based on the number of gauges
-  margin: { t: 25, b: 25, l: 25, r: 25 },
-  grid: { rows: categories.length, columns: 1 } // Create a grid layout to display multiple gauges
+  height: 250 * categories.length, // Adjust the height to give each gauge enough space
+  margin: { t: 20, b: 20, l: 100, r: 100 },
+  grid: { rows: categories.length, columns: 1, pattern: 'independent' }, // Each gauge will have its own row
+  // Adding some padding between the gauges
+  template: {
+    data: {
+      indicator: [
+        {
+          title: { text: "Total Flights" },
+          mode: "number+gauge",
+          delta: { reference: 400 },
+          gauge: { shape: "bullet" }
+        }
+      ]
+    }
+  }
 };
 
 // Render the Plotly gauge chart
