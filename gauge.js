@@ -98,12 +98,21 @@ var gaugeScale = d3.scaleLinear()
 .range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
 .domain([0, 100]);
 
-    // Define the arc generator for the gauge
-    var arc = d3.arc()
-      .innerRadius(70) // Adjust as needed
-      .outerRadius(85) // Adjust as needed
-      .startAngle(0) // Start angle
-      .endAngle(d => gaugeScale(percentages[i])); // End angle based on data
+
+var arc = d3.arc()
+  .innerRadius(70)
+  .outerRadius(85)
+  .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
+  .endAngle(d => gaugeScale(d)); // Ensure this is a function that returns the angle
+
+
+
+    // // Define the arc generator for the gauge
+    // var arc = d3.arc()
+    //   .innerRadius(70) // Adjust as needed
+    //   .outerRadius(85) // Adjust as needed
+    //   .startAngle(0) // Start angle
+    //   .endAngle(d => gaugeScale(percentages[i])); // End angle based on data
 
     // Append the gauge to the SVG element
     var gaugeGroup = svg.append("g")
