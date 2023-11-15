@@ -301,32 +301,32 @@ console.log("Bars should now be visible on the chart.");
 
 // Click event listeners for the progress bars
 
-function attachEventListeners() {
-  d3.select("#total-flights-progress").on("click", function() {
-    showMonthlyChartContainer(); // Make sure the container is visible
-    const totalFlightsMonthlyData = aggregateDataByMonth(data, new Date().getFullYear());
-    drawMonthlyChart(totalFlightsMonthlyData, 'Total Flights');
-  });
+// function attachEventListeners() {
+//   d3.select("#total-flights-progress").on("click", function() {
+//     showMonthlyChartContainer(); // Make sure the container is visible
+//     const totalFlightsMonthlyData = aggregateDataByMonth(data, new Date().getFullYear());
+//     drawMonthlyChart(totalFlightsMonthlyData, 'Total Flights');
+//   });
 
-  d3.select("#shoulder-flights-progress").on("click", function() {
-    showMonthlyChartContainer(); // Make sure the container is visible
-    const shoulderFlightsMonthlyData = aggregateDataByMonth(
-        data.filter(d => d.Time_Category === 'Shoulder hour flights'),
-        new Date().getFullYear());
-    drawMonthlyChart(shoulderFlightsMonthlyData, 'Shoulder Hour Flights');
-  });
+//   d3.select("#shoulder-flights-progress").on("click", function() {
+//     showMonthlyChartContainer(); // Make sure the container is visible
+//     const shoulderFlightsMonthlyData = aggregateDataByMonth(
+//         data.filter(d => d.Time_Category === 'Shoulder hour flights'),
+//         new Date().getFullYear());
+//     drawMonthlyChart(shoulderFlightsMonthlyData, 'Shoulder Hour Flights');
+//   });
 
-  d3.select("#night-flights-progress").on("click", function() {
-    showMonthlyChartContainer(); // Make sure the container is visible
-    const nightFlightsMonthlyData = aggregateDataByMonth(
-        data.filter(d => d.Time_Category === 'Night hour arrivals'), 
-        new Date().getFullYear());
-    drawMonthlyChart(nightFlightsMonthlyData, 'Night Hour Flights');
-  });
-}
+//   d3.select("#night-flights-progress").on("click", function() {
+//     showMonthlyChartContainer(); // Make sure the container is visible
+//     const nightFlightsMonthlyData = aggregateDataByMonth(
+//         data.filter(d => d.Time_Category === 'Night hour arrivals'), 
+//         new Date().getFullYear());
+//     drawMonthlyChart(nightFlightsMonthlyData, 'Night Hour Flights');
+//   });
+// }
 
-// Call the function to attach the event listeners
-attachEventListeners();
+// // Call the function to attach the event listeners
+// attachEventListeners();
 
 }).catch(function(error) {
     console.error("Error loading the data:", error);
