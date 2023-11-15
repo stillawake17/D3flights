@@ -87,7 +87,7 @@ let gaugeData = categories.map((category, index) => {
     delta: { reference: quotas[index] }, // Reference could be set to the quota or some other benchmark
     gauge: {
       axis: { range: [null, 100] }, // Since it's a percentage, the range is 0-100
-      bar: { color: "darkblue" }, // Customize the bar color inside the gauge
+      bar: { color: "orange" }, // Customize the bar color inside the gauge
       steps: [
         { range: [0, 50], color: "lightgreen" },
         { range: [50, 75], color: "yellow" },
