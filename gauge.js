@@ -153,23 +153,16 @@ gaugeGroup.append("line")
 .attr("stroke", "black")
 .attr("stroke-width", 2);
 
-    // // Add text label
-    // gaugeGroup.append("text")
-    //     .attr("x", center_x)
-    //     .attr("y", center_y + 20) // Offset by 20 units below the center
-    //     .attr("text-anchor", "middle")
-    //     .style("font-size", "16px")
-    //     .text(`${percentage.toFixed(1)}%`);
+    // Add text label
+    gaugeGroup.append("text")
+        .attr("x", center_x)
+        .attr("y", center_y + 20) // Offset by 20 units below the center
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(`${percentage.toFixed(1)}%`);
 
 
-        // Add text label for percentage
-gaugeGroup.append("text")
-.attr("x", 0) // Centered on x
-.attr("y", 20) // Offset below the center
-.attr("text-anchor", "middle") // Center the text
-.style("font-size", "16px")
-.text(`${percentage.toFixed(1)}%`);
-
+        
 });
 
 
