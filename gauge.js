@@ -77,14 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
 
-
-// Define gauge scale outside of the forEach loop
+// Assuming the gaugeScale is correctly defined
 var gaugeScale = d3.scaleLinear()
     .range([-Math.PI / 2, Math.PI / 2]) // Range for a semi-circle
     .domain([0, 100]); // The data's domain
 
-// Draw gauges for each category
 const gauges = ["total-flights-gauge", "shoulder-flights-gauge", "night-flights-gauge"];
+
 gauges.forEach((gaugeId, i) => {
     const percentageValue = percentages[i]; // Get the current percentage value
     const percentage = parseFloat(percentageValue); // Make sure it's a number
@@ -94,108 +93,54 @@ gauges.forEach((gaugeId, i) => {
     }
 
     const svg = d3.select(`#${gaugeId}`);
-   
-    
+    const width = +svg.attr("width");
+    const height = +svg.attr("height");
+    const center_x = width / 2;
+    const center_y = height / 2;
 
-    // Assuming svg is a proper selection of an SVG element
-svg.style("border", "1px solid black"); // Add border for debugging
-
-const width = +svg.attr("width"); // Get width attribute
-const height = +svg.attr("height"); // Get height attribute
-const center_x = width / 2;
-const center_y = height / 2;
-
-var gaugeGroup = svg.append("g")
+    var gaugeGroup = svg.append("g")
         .attr("transform", `translate(${center_x}, ${center_y})`);
 
-            // Define the arc generator for the gauge
-var arc = d3.arc()
-.innerRadius(70)
-.outerRadius(85)
-.startAngle(-Math.PI / 2) // Starting angle for a semi-circle
-.endAngle(gaugeScale); // Dynamic end angle based on data
+    var arc = d3.arc()
+        .innerRadius(70)
+        .outerRadius(85)
+        .startAngle(-Math.PI / 2)
+        .endAngle(gaugeScale(percentage)); // Set the end angle based on the percentage
 
-// Append the full arc background first
-gaugeGroup.append("path")
-.datum({endAngle: Math.PI / 2}) // Full semi-circle
-.style("fill", "#ccc") // Fill with a light grey color for the gauge background
-.attr("d", arc);
+    // Append the full arc background first
+    gaugeGroup.append("path")
+        .datum({endAngle: Math.PI / 2}) // Full semi-circle
+        .style("fill", "#ccc") // Fill with a light grey color for the gauge background
+        .attr("d", arc);
 
- // Draw the filled arc path representing the current value
- arc.endAngle(gaugeScale(percentage)); // Set the end angle of the arc
- gaugeGroup.append("path")
-     .datum({endAngle: gaugeScale(percentage)})
-     .style("fill", "#007bff") // Fill with a color for the filled part of the gauge
-     .attr("d", arc);
-
-   
+    // Draw the filled arc path representing the current value
+    gaugeGroup.append("path")
+        .datum({endAngle: gaugeScale(percentage)})
+        .style("fill", "#007bff") // Fill with a color for the filled part of the gauge
+        .attr("d", arc);
 
     // Add needle (line element)
-      const angle = gaugeScale(percentage) - Math.PI / 2;
-    const needleLength = 70; // Adjust as needed
+    const angle = gaugeScale(percentage);
+    const needleLength = 70;
 
-    const needleX = center_x + needleLength * Math.cos(angle);
-    const needleY = center_y - needleLength * Math.sin(angle);
-    
+    gaugeGroup.append("line")
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", needleLength * Math.cos(angle))
+        .attr("y2", -needleLength * Math.sin(angle))
+        .attr("stroke", "black")
+        .attr("stroke-width", 2);
 
-    // gaugeGroup.append("line")
-    //     .attr("x1", center_x)
-    //     .attr("y1", center_y)
-    //     .attr("x2", needleX)
-    //     .attr("y2", needleY)
-    //     .attr("stroke", "black")
-    //     .attr("stroke-width", 2);
-
-        // Append the needle
-// gaugeGroup.append("line")
-// .attr("x1", 0)
-// .attr("y1", 0)
-// .attr("x2", 0)
-// .attr("y2", -needleLength) // Negative because SVG y-coordinates go from top to bottom
-// .attr("transform", `rotate(${needleAngle * (180 / Math.PI)})`) // Convert to degrees for SVG rotation
-// .attr("stroke", "black")
-// .attr("stroke-width", 2);
-
- // Append the needle (line element)
- gaugeGroup.append("line")
- .attr("x1", 0)
- .attr("y1", 0)
- .attr("x2", needleLength * Math.cos(angle))
- .attr("y2", -needleLength * Math.sin(angle)) // Negative because SVG y-coordinates go from top to bottom
- .attr("stroke", "black")
- .attr("stroke-width", 2);
-
-    // // Add text label
-    // gaugeGroup.append("text")
-    //     .attr("x", center_x)
-    //     .attr("y", center_y + 20) // Offset by 20 units below the center
-    //     .attr("text-anchor", "middle")
-    //     .style("font-size", "16px")
-    //     .text(`${percentage.toFixed(1)}%`);
-
-  // Add text label for the percentage
-  gaugeGroup.append("text")
-  .attr("x", 0)
-  .attr("y", 0) // Adjust the position as needed
-  .attr("text-anchor", "middle")
-  .style("font-size", "16px")
-  .text(`${percentage.toFixed(1)}%`);
-});
-        
+    // Add text label for the percentage
+    gaugeGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 20) // Offset below the center
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(`${percentage.toFixed(1)}%`);
 });
 
-
-
-// // Append the gauge to the SVG container
-// var gaugeGroup = svg.append("g")
-//   .attr("transform", "translate(" + center_x + "," + center_y + ")");
-
-// gaugeGroup.append("path")
-//   .datum(percentages[0]) // The data point, e.g., 50 for 50%
-//   .style("fill", barColors.totalFlights)
-//   .attr("d", arc);
-
-
+});
   
 // Add any other elements like text, ticks, etc.
 // Function to draw the bar chart for monthly data
