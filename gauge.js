@@ -95,9 +95,14 @@ gauges.forEach((gaugeId, i) => {
 
     const svg = d3.select(`#${gaugeId}`);
 
-    const center_x = parseInt(svg.style("width","border", "1px solid black")) / 2;
-    const center_y = parseInt(svg.style("height")) / 2;
-   
+    // Assuming svg is a proper selection of an SVG element
+svg.style("border", "1px solid black"); // Add border for debugging
+
+const width = +svg.attr("width"); // Get width attribute
+const height = +svg.attr("height"); // Get height attribute
+const center_x = width / 2;
+const center_y = height / 2;
+
 
 
     // Define the arc generator for the gauge inside the forEach loop
