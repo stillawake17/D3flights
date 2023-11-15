@@ -120,8 +120,10 @@ var arc = d3.arc()
 
     gaugeGroup.append("path")
       .datum(percentages[i])
-      .style("fill", barColors[categories[i]])
+      .style("fill", barColors[categories[i]] || "magenta")
       .attr("d", arc);
+    
+ 
 
     // Add any other elements like text, ticks, etc.
 });
