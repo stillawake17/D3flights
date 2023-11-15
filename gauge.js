@@ -106,12 +106,17 @@ const center_y = height / 2;
 
 
     // Define the arc generator for the gauge inside the forEach loop
-    var arc = d3.arc()
+    var fullArc = d3.arc()
         .innerRadius(70)
         .outerRadius(85)
         .startAngle(-Math.PI / 2) // Starting angle for a semi-circle
-        .endAngle(gaugeScale(percentage)); // Ensure this is a function that returns the angle
+        .endAngle(Math.PI / 2); // Ensure this is a function that returns the angle
 
+        // Append the full arc background first
+gaugeGroup.append("path")
+.datum({endAngle: Math.PI / 2}) // Full semi-circle
+.style("fill", "url(#gauge-gradient)") // Assuming you have a gradient defined for the full range
+.attr("d", fullArc);
 
     var gaugeGroup = svg.append("g")
         .attr("transform", `translate(${center_x}, ${center_y})`);
@@ -123,28 +128,48 @@ const center_y = height / 2;
         .attr("d", arc);
 
     // Add needle (line element)
-    const angle = gaugeScale(percentage);
+      const angle = gaugeScale(percentage) - Math.PI / 2;
     const needleLength = 70; // Adjust as needed
 
     const needleX = center_x + needleLength * Math.cos(angle);
     const needleY = center_y - needleLength * Math.sin(angle);
     
 
-    gaugeGroup.append("line")
-        .attr("x1", center_x)
-        .attr("y1", center_y)
-        .attr("x2", needleX)
-        .attr("y2", needleY)
-        .attr("stroke", "black")
-        .attr("stroke-width", 2);
+    // gaugeGroup.append("line")
+    //     .attr("x1", center_x)
+    //     .attr("y1", center_y)
+    //     .attr("x2", needleX)
+    //     .attr("y2", needleY)
+    //     .attr("stroke", "black")
+    //     .attr("stroke-width", 2);
 
-    // Add text label
-    gaugeGroup.append("text")
-        .attr("x", center_x)
-        .attr("y", center_y + 20) // Offset by 20 units below the center
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(`${percentage.toFixed(1)}%`);
+        // Append the needle
+gaugeGroup.append("line")
+.attr("x1", 0)
+.attr("y1", 0)
+.attr("x2", 0)
+.attr("y2", -needleLength) // Negative because SVG y-coordinates go from top to bottom
+.attr("transform", `rotate(${needleAngle * (180 / Math.PI)})`) // Convert to degrees for SVG rotation
+.attr("stroke", "black")
+.attr("stroke-width", 2);
+
+    // // Add text label
+    // gaugeGroup.append("text")
+    //     .attr("x", center_x)
+    //     .attr("y", center_y + 20) // Offset by 20 units below the center
+    //     .attr("text-anchor", "middle")
+    //     .style("font-size", "16px")
+    //     .text(`${percentage.toFixed(1)}%`);
+
+
+        // Add text label for percentage
+gaugeGroup.append("text")
+.attr("x", 0) // Centered on x
+.attr("y", 20) // Offset below the center
+.attr("text-anchor", "middle") // Center the text
+.style("font-size", "16px")
+.text(`${percentage.toFixed(1)}%`);
+
 });
 
 

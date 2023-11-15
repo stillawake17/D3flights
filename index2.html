@@ -13,25 +13,19 @@
     <!-- <div id="chart"></div> -->
     <div id="gauge-charts-container">
         <svg id="total-flights-gauge" width="300" height="150">
+          
             <defs>
-                <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" style="stop-color:green; stop-opacity:1" />
-                  <stop offset="50%" style="stop-color:yellow; stop-opacity:1" />
-                  <stop offset="100%" style="stop-color:red; stop-opacity:1" />
-                </linearGradient>
-              </defs>
+              <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%" spreadMethod="pad">
+                <stop offset="0%" stop-color="green" stop-opacity="1"></stop>
+                <stop offset="50%" stop-color="yellow" stop-opacity="1"></stop>
+                <stop offset="100%" stop-color="red" stop-opacity="1"></stop>
+              </linearGradient>
+            </defs>
+            <!-- The rest of your SVG elements go here -->
+                    
         </svg>
         <svg id="shoulder-flights-gauge" width="300" height="150">
-            <defs>
-                <linearGradient id="gauge-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" style="stop-color:green; stop-opacity:1" />
-                  <stop offset="50%" style="stop-color:yellow; stop-opacity:1" />
-                  <stop offset="100%" style="stop-color:red; stop-opacity:1" />
-                </linearGradient>
-              </defs>
-        </svg>
-        <svg id="night-flights-gauge" width="200" height="160">
-            <defs>
+             <defs>
                 <linearGradient id="gauge-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
                   <stop offset="0%" style="stop-color:green; stop-opacity:1" />
                   <stop offset="50%" style="stop-color:yellow; stop-opacity:1" />
