@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Categories and counts
         let categories = ['Total Flights', 'Shoulder Hour Flights', 'Night Hour Flights'];
         let counts = [total_flights, shoulder_hour_flights, night_hour_flights];
-    
+    // Calculating percentages
+        let percentages = counts.map((count, index) => (count / quotas[index]) * 100);
        
        
     // Function to aggregate flight data by month for a given year
@@ -75,8 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     
 
-// Calculating percentages
-let percentages = counts.map((count, index) => (count / quotas[index]) * 100);
+
 
 // Define gauge scale outside of the forEach loop
 var gaugeScale = d3.scaleLinear()
@@ -120,6 +120,7 @@ gauges.forEach((gaugeId, i) => {
 
     const needleX = center_x + needleLength * Math.cos(angle);
     const needleY = center_y - needleLength * Math.sin(angle);
+    
 
     gaugeGroup.append("line")
         .attr("x1", center_x)
