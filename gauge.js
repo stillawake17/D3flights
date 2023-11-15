@@ -103,6 +103,8 @@ let gaugeData = categories.map((category, index) => {
 });
 
 
+// ... Repeat for the other two gauge data configurations ...
+
 
 
 // For Total Flights
@@ -119,9 +121,14 @@ let dataTotalFlights = [{
       { range: [50, 75], color: "yellow" },
       { range: [75, 100], color: "red" }
     ],
+    threshold: {
+      line: { color: "red", width: 4 },
+      thickness: 0.75,
+      value: percentages[0]
+    }
   }
 }];
-Plotly.newPlot('gauge-total-flights', dataTotalFlights, { width: 600, height: 300 });
+// Plotly.newPlot('gauge-total-flights', dataTotalFlights, { width: 600, height: 300 });
 
 // For Shoulder Hour Flights
 let dataShoulderFlights = [{
@@ -136,10 +143,13 @@ let dataShoulderFlights = [{
       { range: [0, 50], color: "green" },
       { range: [50, 75], color: "yellow" },
       { range: [75, 100], color: "red" }
-    ],
+    ],threshold: {
+      line: { color: "red", width: 4 },
+      thickness: 0.75,
+      value: percentages[0]
+    }
   }
 }];
-Plotly.newPlot('gauge-shoulder-flights', dataShoulderFlights, { width: 600, height: 300 });
 
 // For Night Hour Flights
 let dataNightFlights = [{
@@ -154,7 +164,11 @@ let dataNightFlights = [{
       { range: [0, 50], color: "green" },
       { range: [50, 75], color: "yellow" },
       { range: [75, 100], color: "red" }
-    ],
+    ],threshold: {
+      line: { color: "red", width: 4 },
+      thickness: 0.75,
+      value: percentages[0]
+    }
   }
 }];
 
@@ -165,11 +179,13 @@ var layout = {
   margin: { t: 25, b: 25, l: 50, r: 50 }
 };
 
-Plotly.newPlot('gauge-night-flights', dataNightFlights, { width: 600, height: 300 });
+
+
+
 // Assuming your percentages array is defined and contains the correct data
 Plotly.newPlot('gauge-total-flights', dataTotalFlights, { width: 300, height: 150 });
 Plotly.newPlot('gauge-shoulder-flights', dataShoulderFlights, { width: 300, height: 150 });
-Plotly.newPlot('gauge-night-flights', dataNightFlights, { width: 300, height: 150 });
+Plotly.newPlot('gauge-night-flights', dataNightFlights, { width: 600, height: 300 });
 
 
 // Render the Plotly gauge chart
