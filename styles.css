@@ -106,10 +106,15 @@ h2 {
     padding: 20px;
 }
 
-/* #monthly-chart-container {
-
-    padding-left:350px;
-} */
+#monthly-chart-container {
+  max-width: 960px; /* Match the width of the progress bars container if desired */
+  margin: 20px auto; /* Center it horizontally with margin */
+  padding: 20px;
+  background-color: #fff; /* Or any background color you prefer */
+  border-radius: 10px; /* Optional: if you want rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: if you want a shadow */
+  /* more styles as needed */
+}
 
 @media (max-width: 768px) {
   #gauge-charts-container {
