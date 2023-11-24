@@ -22,7 +22,7 @@ d3.json('data/combined_flights_data.json').then(function(data) {
     let night_hour_flights = data.filter(d => d.Time_Category === 'Night hour arrivals').length;
 
     // Quotas
-    let quotas = [85990, 9500, 3000];
+    let quotas = [85990, 9500, 4000];
 
     // Categories and counts
     let categories = ['Total Flights', 'Shoulder Hour Flights', 'Night Hour Flights'];
